@@ -8,6 +8,7 @@ class CreateAccountByKey extends React.Component {
         super();
         this.state = {
             access: '',
+            publicKey:'',
             privateKey: '',
         };
     }
@@ -15,9 +16,11 @@ class CreateAccountByKey extends React.Component {
     onCreateAccountByKey = () => {
         const privateKey = '0000000000000000000000000000000000000000000000000000000000000000';
         const account = SymbolSDK.Account.createFromPrivateKey(privateKey, SymbolSDK.NetworkType.TEST_NET);
+        account.
         this.setState({
             access: account.address.pretty(),
-            privateKey: account.privateKey
+            publicKey: account.publicKey,
+            privateKey: account.privateKey,
         });
     };
 
@@ -40,6 +43,14 @@ class CreateAccountByKey extends React.Component {
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl disabled value={this.state.access}/>
+                        </InputGroup>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>
+                                    Public Key
+                                </InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl disabled value={this.state.publicKey}/>
                         </InputGroup>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>

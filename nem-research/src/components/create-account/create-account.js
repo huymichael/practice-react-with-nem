@@ -7,6 +7,7 @@ class CreateAccount extends React.Component {
         super();
         this.state = {
             access: '',
+            publicKey: '',
             privateKey: '',
         };
     }
@@ -15,6 +16,7 @@ class CreateAccount extends React.Component {
         const account = SymbolSDK.Account.generateNewAccount(SymbolSDK.NetworkType.TEST_NET);
         this.setState({
             access: account.address.pretty(),
+            publicKey: account.publicKey,
             privateKey: account.privateKey
         });
     };
@@ -35,6 +37,14 @@ class CreateAccount extends React.Component {
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl disabled value={this.state.access}/>
+                        </InputGroup>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>
+                                    Public Key
+                                </InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl disabled value={this.state.publicKey}/>
                         </InputGroup>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>

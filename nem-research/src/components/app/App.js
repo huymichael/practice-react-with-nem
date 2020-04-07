@@ -4,6 +4,7 @@ import './App.scss';
 import CreateAccount from '../create-account/create-account';
 import CreateAccountByKey from '../create-account-by-key/create-account-by-key';
 import CreateMosaic from '../create-mosaic/create-mosaic';
+import GetAccountInfo from '../get-account-info/get-account-info';
 
 const App = () => {
     return (
@@ -12,28 +13,11 @@ const App = () => {
             <br/>
             <CreateAccountByKey/>
             <br/>
+            <GetAccountInfo/>
+            <br/>
             <CreateMosaic/>
         </Container>
     );
 };
-
-// const App = () => {
-//     return (
-//         <div>
-//             <h1>NEM PRACTICE</h1>
-//             <div>
-//                 <Button
-//                     onClick={() => {
-//                         const account = SymbolSDK.Account
-//                             .generateNewAccount(SymbolSDK.NetworkType.TEST_NET);
-//                         console.log('Your new account address is:', account.address.pretty(),
-//                             'and its private key', account.privateKey);
-//                     }}>
-//                     Create account
-//                 </Button>
-//             </div>
-//         </div>
-//     );
-// };
 
 export default App;

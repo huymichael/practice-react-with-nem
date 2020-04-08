@@ -9,8 +9,9 @@ class GetAccountInfo extends React.Component {
         this.state = {
             address: '',
             publicKey: '',
-            mosaicID: '',
-            mosaicAmount: '',
+            mosaics: [],
+            totalAmount: '',
+            error: ''
         };
     }
 
@@ -20,12 +21,9 @@ class GetAccountInfo extends React.Component {
             }
         );
     };
-
     onGetAccountInfo = () => {
         // replace with recipient address
-        // const rawAddress = 'TBBODM-QQFQWO-EGER7B-GEKDH3-LWOKVY-O44NQQ-UWT3';
-        const address = SymbolSDK.Address.createFromRawAddress(this.state.address);
-        // const address = SymbolSDK.Address.createFromRawAddress(this.state.address.trim());
+        const address = SymbolSDK.Address.createFromRawAddress(this.state.address.trim());
         // replace with node endpoint
         const nodeUrl = 'http://api-01.us-west-1.symboldev.network:3000';
         const repositoryFactory = new SymbolSDK.RepositoryFactoryHttp(nodeUrl);
@@ -35,14 +33,24 @@ class GetAccountInfo extends React.Component {
             .getAccountInfo(address)
             .subscribe(
                 (accountInfo) => {
+                    let totalAmount = 0;
+                    accountInfo.mosaics.forEach((item) => {
+                        totalAmount += item.amount.lower;
+                    });
+                    // console.log(totalAmount);
+                    // console.log(totalAmount);
                     this.setState({
                         publicKey: accountInfo.publicKey,
-                        mosaicID: accountInfo.mosaics[0].id['id'].lower,
-                        mosaicAmount: accountInfo.mosaics[0].amount.lower,
+                        mosaics: accountInfo.mosaics,
+                        totalAmount: totalAmount,
+                        error: ''
                     });
-                    console.log(accountInfo);
                 },
-                (err) => console.error(err));
+                (err) => {
+                    this.setState({
+                        error: err
+                    });
+                });
     };
 
     render() {
@@ -76,23 +84,19 @@ class GetAccountInfo extends React.Component {
                             <FormControl disabled value={this.state.publicKey}/>
                         </InputGroup>
 
-                        <InputGroup className="mb-3">
-                            <InputGroup.Prepend>
-                                <InputGroup.Text>
-                                    Mosaic ID
-                                </InputGroup.Text>
-                            </InputGroup.Prepend>
-                            <FormControl disabled value={this.state.mosaicID.toString()}/>
-                        </InputGroup>
+                        <div>
+                            {this.state.mosaics.forEach(item=>(
+                                <p>
+                                    {item.amount.lower}
+                                </p>
+                            ))}
+                        </div>
 
-                        <InputGroup className="mb-3">
-                            <InputGroup.Prepend>
-                                <InputGroup.Text>
-                                    Mosaic Amount
-                                </InputGroup.Text>
-                            </InputGroup.Prepend>
-                            <FormControl disabled value={this.state.mosaicAmount}/>
-                        </InputGroup>
+                        <br/>
+                        <Card.Footer>
+                            <h4>error</h4>
+                            <p>{this.state.error.toString()}</p>
+                        </Card.Footer>
                     </Card.Body>
                 </Container>
             </Card>

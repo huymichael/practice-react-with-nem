@@ -1,15 +1,26 @@
 import React from 'react';
-import {Button, Card, Container} from 'react-bootstrap';
+import {Button, Card, Container, FormControl, InputGroup} from 'react-bootstrap';
 import * as SymbolSDK from 'symbol-sdk';
 
 class CreateMosaic extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            privateKey: ''
+        };
+    }
+
+    onInputPrivateKey = (event) => {
+        this.setState({
+            privateKey: event.target.value
+        });
+    };
 
     onCreateMosaic = () => {
-// replace with network type
+        // replace with network type
         const networkType = SymbolSDK.NetworkType.TEST_NET;
         // replace with private key
-        const privateKey = '1111111111111111111111111111111111111111111111111111111111111111';
-        const account = SymbolSDK.Account.createFromPrivateKey(privateKey, networkType);
+        const account = SymbolSDK.Account.createFromPrivateKey(this.state.privateKey.trim(), networkType);
         // replace with duration (in blocks)
         const duration = SymbolSDK.UInt64.fromUint(0);
         // replace with custom mosaic flags
@@ -28,8 +39,9 @@ class CreateMosaic extends React.Component {
             divisibility,
             duration,
             networkType);
+
         // replace with mosaic units to increase
-        const delta = 1000000;
+        const delta = 500;
         const mosaicSupplyChangeTransaction = SymbolSDK.MosaicSupplyChangeTransaction
             .create(SymbolSDK.Deadline.create(),
                 mosaicDefinitionTransaction.mosaicId,
@@ -62,6 +74,16 @@ class CreateMosaic extends React.Component {
                     <Card.Title>
                         Create Mosaic
                     </Card.Title>
+                    <Card.Body>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>
+                                    Private Key
+                                </InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl onChange={this.onInputPrivateKey} placeholder='Input Private Key'/>
+                        </InputGroup>
+                    </Card.Body>
                     <Button onClick={this.onCreateMosaic}>
                         Create Mosaic
                     </Button>

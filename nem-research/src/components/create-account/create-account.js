@@ -13,6 +13,11 @@ class CreateAccount extends React.Component {
     }
 
     onCreateAccount = () => {
+        // const password = new SymbolSDK.Password('password');
+        //
+        // const wallet = SymbolSDK.SimpleWallet.create('michael1', password, SymbolSDK.NetworkType.TEST_NET);
+        // const account = wallet.open(password);
+        // console.log('Your new account address is:', account.address.pretty(), 'and its private key', account.privateKey);
         const account = SymbolSDK.Account.generateNewAccount(SymbolSDK.NetworkType.TEST_NET);
         this.setState({
             access: account.address.pretty(),

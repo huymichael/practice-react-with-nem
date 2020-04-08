@@ -8,19 +8,25 @@ class CreateAccountByKey extends React.Component {
         super();
         this.state = {
             access: '',
-            publicKey:'',
+            publicKey: '',
             privateKey: '',
         };
     }
 
     onCreateAccountByKey = () => {
-        const privateKey = '0000000000000000000000000000000000000000000000000000000000000000';
-        const account = SymbolSDK.Account.createFromPrivateKey(privateKey, SymbolSDK.NetworkType.TEST_NET);
-        account.
+        const account = SymbolSDK.Account.createFromPrivateKey(
+            this.state.privateKey,
+            SymbolSDK.NetworkType.TEST_NET);
+
         this.setState({
             access: account.address.pretty(),
             publicKey: account.publicKey,
             privateKey: account.privateKey,
+        });
+    };
+    onInput = (event) => {
+        this.setState({
+            privateKey: event.target.value,
         });
     };
 
@@ -31,10 +37,17 @@ class CreateAccountByKey extends React.Component {
                     <Card.Title className='mt-2'>
                         Create Account By Private Key
                     </Card.Title>
-                    <Card.Subtitle>
-                        Private Key : 0000000000000000000000000000000000000000000000000000000000000000
-                    </Card.Subtitle>
                     <Card.Body>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>
+                                    Private Key
+                                </InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl onChange={this.onInput} placeholder='Input Private Key'/>
+                        </InputGroup>
+
+
                         <Button className='mb-2' onClick={this.onCreateAccountByKey}>Create Account</Button>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
@@ -44,6 +57,8 @@ class CreateAccountByKey extends React.Component {
                             </InputGroup.Prepend>
                             <FormControl disabled value={this.state.access}/>
                         </InputGroup>
+
+
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
                                 <InputGroup.Text>
@@ -51,14 +66,6 @@ class CreateAccountByKey extends React.Component {
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl disabled value={this.state.publicKey}/>
-                        </InputGroup>
-                        <InputGroup className="mb-3">
-                            <InputGroup.Prepend>
-                                <InputGroup.Text>
-                                    Private Key
-                                </InputGroup.Text>
-                            </InputGroup.Prepend>
-                            <FormControl disabled value={this.state.privateKey}/>
                         </InputGroup>
                     </Card.Body>
                 </Container>

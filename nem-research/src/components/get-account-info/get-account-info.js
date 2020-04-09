@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Card, Container, FormControl, InputGroup} from 'react-bootstrap';
+import {Button, Card, Container, FormControl, InputGroup, Table} from 'react-bootstrap';
 import * as SymbolSDK from 'symbol-sdk';
 
 class GetAccountInfo extends React.Component {
@@ -65,10 +65,10 @@ class GetAccountInfo extends React.Component {
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
                                 <InputGroup.Text>
-                                    Access
+                                    Address
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
-                            <FormControl placeholder='Input your Access Address'
+                            <FormControl placeholder='Input your Address'
                                          onChange={this.onValueChange}/>
                         </InputGroup>
 
@@ -84,13 +84,24 @@ class GetAccountInfo extends React.Component {
                             <FormControl disabled value={this.state.publicKey}/>
                         </InputGroup>
 
-                        <div>
-                            {this.state.mosaics.forEach(item=>(
-                                <p>
-                                    {item.amount.lower}
-                                </p>
+                        <Table striped bordered hover>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Mosaic id</th>
+                                <th>Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {this.state.mosaics.map((mosaic, index) => (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>{mosaic.id.toHex() || 'None'}</td>
+                                    <td>{mosaic.amount.lower || 0}</td>
+                                </tr>
                             ))}
-                        </div>
+                            </tbody>
+                        </Table>
 
                         <br/>
                         <Card.Footer>

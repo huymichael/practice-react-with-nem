@@ -6,7 +6,8 @@ class CreateMosaic extends React.Component {
     constructor() {
         super();
         this.state = {
-            privateKey: ''
+            privateKey: '',
+            mosaicUnit: ''
         };
     }
 
@@ -15,7 +16,11 @@ class CreateMosaic extends React.Component {
             privateKey: event.target.value
         });
     };
-
+    onInputMosaicUnit = (event) => {
+        this.setState({
+            mosaicUnit: event.target.value || 0
+        });
+    };
     onCreateMosaic = () => {
         // replace with network type
         const networkType = SymbolSDK.NetworkType.TEST_NET;
@@ -41,7 +46,7 @@ class CreateMosaic extends React.Component {
             networkType);
 
         // replace with mosaic units to increase
-        const delta = 500;
+        const delta = this.state.mosaicUnit;
         const mosaicSupplyChangeTransaction = SymbolSDK.MosaicSupplyChangeTransaction
             .create(SymbolSDK.Deadline.create(),
                 mosaicDefinitionTransaction.mosaicId,
@@ -81,8 +86,20 @@ class CreateMosaic extends React.Component {
                                     Private Key
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
-                            <FormControl onChange={this.onInputPrivateKey} placeholder='Input Private Key'/>
+                            <FormControl onChange={this.onInputPrivateKey}
+                                         placeholder='Input Private Key'/>
                         </InputGroup>
+
+                        <InputGroup className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>
+                                    Mosaic Units
+                                </InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl onChange={this.onInputMosaicUnit}
+                                         placeholder='Input Mosaic Unit'/>
+                        </InputGroup>
+
                     </Card.Body>
                     <Button onClick={this.onCreateMosaic}>
                         Create Mosaic

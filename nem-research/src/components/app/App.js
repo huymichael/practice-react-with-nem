@@ -5,6 +5,7 @@ import CreateAccount from '../create-account/create-account';
 import CreateAccountByKey from '../create-account-by-key/create-account-by-key';
 import CreateMosaic from '../create-mosaic/create-mosaic';
 import GetAccountInfo from '../get-account-info/get-account-info';
+import SendingMosaic from '../sending-mosaic/sending-mosaic';
 
 const App = () => {
     return (
@@ -16,6 +17,8 @@ const App = () => {
             <GetAccountInfo/>
             <br/>
             <CreateMosaic/>
+            <br/>
+            <SendingMosaic/>
         </Container>
     );
 };

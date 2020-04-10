@@ -18,12 +18,12 @@ class SendingMosaic extends React.Component {
     onSendMosaic = () => {
         // Defining a transaction
         // replace with recipient address
-        const rawAddress = 'TBBODM-QQFQWO-EGER7B-GEKDH3-LWOKVY-O44NQQ-UWT3';
+        const rawAddress = 'TBIEGN-PLFGHO-2O2QRB-B7RSYN-5TC3AL-6TJE5O-DLK6';
         const recipientAddress = SymbolSDK.Address.createFromRawAddress(rawAddress);
 // replace with network type
         const networkType = SymbolSDK.NetworkType.TEST_NET;
 // replace with symbol.xym id
-        const networkCurrencyMosaicId = new SymbolSDK.MosaicId('51A99028058245A8');
+        const networkCurrencyMosaicId = new SymbolSDK.MosaicId('3FE62E950DF48099');
         // replace with network currency divisibility
         const networkCurrencyDivisibility = 6;
 
@@ -31,16 +31,16 @@ class SendingMosaic extends React.Component {
             SymbolSDK.Deadline.create(),
             recipientAddress,
             [new SymbolSDK.Mosaic(networkCurrencyMosaicId,
-                SymbolSDK.UInt64.fromUint(10 * Math.pow(10, networkCurrencyDivisibility)))],
+                SymbolSDK.UInt64.fromUint(69 * Math.pow(10, networkCurrencyDivisibility)))],
             SymbolSDK.PlainMessage.create('This is a test message'),
             networkType,
             SymbolSDK.UInt64.fromUint(50000));
         console.log(transferTransaction.serialize());
         // replace with sender private key
-        const privateKey = '1111111111111111111111111111111111111111111111111111111111111111';
+        const privateKey = 'BFD81190D7147AA105B6B4E741CF77612B0D814255873066CAB10A5EEB09D036';
         const account = SymbolSDK.Account.createFromPrivateKey(privateKey, networkType);
         // replace with meta.generationHash (nodeUrl + '/block/1')
-        const networkGenerationHash = '44D2225B8932C9A96DCB13508CBCDFFA9A9663BFBA2354FEEC8FCFCB7E19846C';
+        const networkGenerationHash = 'E6FDE215A2807B602A58EAFB2B000800C7EB9095C7DBE37FA0F79BEA3A542AE7';
         const signedTransaction = account.sign(transferTransaction, networkGenerationHash);
 
         // replace with node endpoint

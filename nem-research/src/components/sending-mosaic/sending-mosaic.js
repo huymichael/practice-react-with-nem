@@ -18,12 +18,12 @@ class SendingMosaic extends React.Component {
     onSendMosaic = () => {
         // Defining a transaction
         // replace with recipient address
-        const rawAddress = 'TA6FD7-5PKQVF-EMHGDK-QKC4VF-4QIFC6-UWOWUZ-2USD';
+        const rawAddress = 'TBBODM-QQFQWO-EGER7B-GEKDH3-LWOKVY-O44NQQ-UWT3';
         const recipientAddress = SymbolSDK.Address.createFromRawAddress(rawAddress);
 // replace with network type
         const networkType = SymbolSDK.NetworkType.TEST_NET;
 // replace with symbol.xym id
-        const networkCurrencyMosaicId = new SymbolSDK.MosaicId('747B276C30626442');
+        const networkCurrencyMosaicId = new SymbolSDK.MosaicId('51A99028058245A8');
         // replace with network currency divisibility
         const networkCurrencyDivisibility = 6;
 
@@ -34,7 +34,7 @@ class SendingMosaic extends React.Component {
                 SymbolSDK.UInt64.fromUint(10 * Math.pow(10, networkCurrencyDivisibility)))],
             SymbolSDK.PlainMessage.create('This is a test message'),
             networkType,
-            SymbolSDK.UInt64.fromUint(168));
+            SymbolSDK.UInt64.fromUint(50000));
         console.log(transferTransaction.serialize());
         // replace with sender private key
         const privateKey = '1111111111111111111111111111111111111111111111111111111111111111';

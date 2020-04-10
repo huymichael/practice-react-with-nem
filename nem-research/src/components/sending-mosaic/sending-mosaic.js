@@ -25,7 +25,7 @@ class SendingMosaic extends React.Component {
 // replace with symbol.xym id
         const networkCurrencyMosaicId = new SymbolSDK.MosaicId('3FE62E950DF48099');
         // replace with network currency divisibility
-        const networkCurrencyDivisibility = 6;
+        const networkCurrencyDivisibility = 0;
 
         const transferTransaction = SymbolSDK.TransferTransaction.create(
             SymbolSDK.Deadline.create(),
@@ -40,7 +40,7 @@ class SendingMosaic extends React.Component {
         const privateKey = 'BFD81190D7147AA105B6B4E741CF77612B0D814255873066CAB10A5EEB09D036';
         const account = SymbolSDK.Account.createFromPrivateKey(privateKey, networkType);
         // replace with meta.generationHash (nodeUrl + '/block/1')
-        const networkGenerationHash = 'E6FDE215A2807B602A58EAFB2B000800C7EB9095C7DBE37FA0F79BEA3A542AE7';
+        const networkGenerationHash = '44D2225B8932C9A96DCB13508CBCDFFA9A9663BFBA2354FEEC8FCFCB7E19846C';
         const signedTransaction = account.sign(transferTransaction, networkGenerationHash);
 
         // replace with node endpoint

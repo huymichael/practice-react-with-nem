@@ -2,58 +2,123 @@ import React from 'react';
 import {Button, Card, Col, Container, FormControl, InputGroup, Row} from 'react-bootstrap';
 import * as SymbolSDK from 'symbol-sdk';
 
+
 class SendingMosaic extends React.Component {
     constructor() {
         super();
         this.state = {
             mosaicId: '',
             mosaicUnit: '',
+            mosaicDivisibility: '',
             recipientAddress: '',
+            privateKey: '',
             messages: ''
         };
     }
 
-    onInputAddressChange = (value) => {
+
+    onInputMosaicID = (event) => {
+        this.setState({
+            mosaicId: event.target.value.trim()
+        });
+        this.onGetMosaicInfo(event.target.value.trim());
     };
+
+    onGetMosaicInfo = (mosaicID) => {
+        // replace with mosaic id
+        // const mosaicIdHex = '3FE62E950DF48099';
+        const mosaicId = new SymbolSDK.MosaicId(mosaicID);
+
+        // replace with node endpoint
+        const nodeUrl = 'http://api-01.us-west-1.symboldev.network:3000';
+        const repositoryFactory = new SymbolSDK.RepositoryFactoryHttp(nodeUrl);
+        const mosaicHttp = repositoryFactory.createMosaicRepository();
+
+        mosaicHttp
+            .getMosaic(mosaicId)
+            .subscribe(
+                (mosaicInfo) =>
+                    this.setState({
+                        mosaicDivisibility: mosaicInfo.divisibility
+                    }),
+                (err) => console.error(err));
+    };
+
+    onInputAddressChange = (event) => {
+        this.setState(
+            {recipientAddress: event.target.value.trim()}
+        );
+    };
+
+    onInputMosaicAmount = (event) => {
+        this.setState(
+            {mosaicUnit: event.target.value.trim()}
+        );
+    };
+
+    onInputMessage = (event) => {
+        this.setState(
+            {messages: event.target.value.trim()}
+        );
+    };
+
+    onInputPrivateKey = (event) => {
+        this.setState(
+            {privateKey: event.target.value.trim()}
+        );
+    };
+
     onSendMosaic = () => {
         // Defining a transaction
         // replace with recipient address
-        const rawAddress = 'TBIEGN-PLFGHO-2O2QRB-B7RSYN-5TC3AL-6TJE5O-DLK6';
-        const recipientAddress = SymbolSDK.Address.createFromRawAddress(rawAddress);
-// replace with network type
+        const nodeUrl = 'http://api-01.us-west-1.symboldev.network:3000';
+        const recipientAddress = SymbolSDK.Address.createFromRawAddress(this.state.recipientAddress);
+        // replace with network type
         const networkType = SymbolSDK.NetworkType.TEST_NET;
-// replace with symbol.xym id
-        const networkCurrencyMosaicId = new SymbolSDK.MosaicId('3FE62E950DF48099');
+        // replace with symbol.xym id
+        const networkCurrencyMosaicId = new SymbolSDK.MosaicId(this.state.mosaicId);
         // replace with network currency divisibility
-        const networkCurrencyDivisibility = 0;
 
         const transferTransaction = SymbolSDK.TransferTransaction.create(
             SymbolSDK.Deadline.create(),
             recipientAddress,
             [new SymbolSDK.Mosaic(networkCurrencyMosaicId,
-                SymbolSDK.UInt64.fromUint(69 * Math.pow(10, networkCurrencyDivisibility)))],
-            SymbolSDK.PlainMessage.create('This is a test message'),
+                SymbolSDK.UInt64.fromUint(this.state.mosaicUnit * Math.pow(10, this.state.mosaicDivisibility)))],
+            SymbolSDK.PlainMessage.create(this.state.messages || ''),
             networkType,
             SymbolSDK.UInt64.fromUint(50000));
-        console.log(transferTransaction.serialize());
+
+
         // replace with sender private key
-        const privateKey = 'BFD81190D7147AA105B6B4E741CF77612B0D814255873066CAB10A5EEB09D036';
+        const privateKey = this.state.privateKey;
         const account = SymbolSDK.Account.createFromPrivateKey(privateKey, networkType);
         // replace with meta.generationHash (nodeUrl + '/block/1')
-        const networkGenerationHash = '44D2225B8932C9A96DCB13508CBCDFFA9A9663BFBA2354FEEC8FCFCB7E19846C';
-        const signedTransaction = account.sign(transferTransaction, networkGenerationHash);
 
-        // replace with node endpoint
-        const nodeUrl = 'http://api-01.us-west-1.symboldev.network:3000';
-        const repositoryFactory = new SymbolSDK.RepositoryFactoryHttp(nodeUrl);
-        const transactionHttp = repositoryFactory.createTransactionRepository();
+        //Get hash number
+        const repoFactory = new SymbolSDK.RepositoryFactoryHttp(nodeUrl);
+        const transactionHttp = repoFactory.createTransactionRepository();
 
-        transactionHttp
-            .announce(signedTransaction)
-            .subscribe(
-                (x) => console.log(x),
-                (err) => console.error(err));
+        repoFactory.getGenerationHash().subscribe((hash) => {
+            console.log(hash);
+            const signedTransaction = account.sign(transferTransaction, hash);
+            transactionHttp
+                .announce(signedTransaction)
+                .subscribe(
+                    (x) => console.log(x),
+                    (err) => console.error(err));
+        }, error => console.log(error));
+
     };
+    // getHash = () => {
+    //     const nodeUrl = 'http://api-01.us-west-1.symboldev.network:3000';
+    //     const hash = new SymbolSDK.RepositoryFactoryHttp(nodeUrl);
+    //     hash.getGenerationHash().subscribe((hash) => {
+    //         console.log(hash);
+    //         console.log('olaola');
+    //         console.log('olaola2');
+    //         console.log('olaola3');
+    //     });
+    // };
 
     render() {
         return (
@@ -72,7 +137,7 @@ class SendingMosaic extends React.Component {
                                             Your MosaicId
                                         </InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <FormControl placeholder='Input your Mosaic ID'/>
+                                    <FormControl onChange={this.onInputMosaicID} placeholder='Input your Mosaic ID'/>
                                 </InputGroup>
                             </Col>
 
@@ -83,7 +148,8 @@ class SendingMosaic extends React.Component {
                                             Mosaic Unit
                                         </InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <FormControl placeholder='Input Mosaic Unit'/>
+                                    <FormControl onChange={this.onInputMosaicAmount}
+                                                 placeholder='Input Mosaic Unit'/>
                                 </InputGroup>
                             </Col>
                         </Row>
@@ -107,7 +173,7 @@ class SendingMosaic extends React.Component {
                                             Network Currency Divisibility
                                         </InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <FormControl disabled value='6'/>
+                                    <FormControl disabled value={this.state.mosaicDivisibility}/>
                                 </InputGroup>
                             </Col>
                         </Row>
@@ -118,7 +184,8 @@ class SendingMosaic extends React.Component {
                                     Recipient Address
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
-                            <FormControl placeholder='Input Recipient Address'/>
+                            <FormControl onChange={this.onInputAddressChange}
+                                         placeholder='Input Recipient Address'/>
                         </InputGroup>
 
                         <InputGroup className="mb-3">
@@ -127,12 +194,21 @@ class SendingMosaic extends React.Component {
                                     Messages
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
-                            <FormControl placeholder='Input Messages'/>
+                            <FormControl onChange={this.onInputMessage} placeholder='Input Messages'/>
                         </InputGroup>
 
+                        <InputGroup className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>
+                                    Private Key
+                                </InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl onChange={this.onInputPrivateKey} placeholder='Input Private Key'/>
+                        </InputGroup>
 
                         <Button onClick={this.onSendMosaic} className='mb-2'>Send Mosaic</Button>
-
+                        {/*<br/>*/}
+                        {/*<Button onClick={this.getHash} className='mb-2'>get HASH</Button>*/}
                     </Card.Body>
                 </Container>
             </Card>

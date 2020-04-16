@@ -25,7 +25,7 @@ class GetAccountInfo extends React.Component {
         // replace with recipient address
         const address = SymbolSDK.Address.createFromRawAddress(this.state.address.trim());
         // replace with node endpoint
-        const nodeUrl = 'http://api-01.us-west-1.symboldev.network:3000';
+        const nodeUrl = 'http://api-01.eu-central-1.symboldev.network:3000';
         const repositoryFactory = new SymbolSDK.RepositoryFactoryHttp(nodeUrl);
         const accountHttp = repositoryFactory.createAccountRepository();
 

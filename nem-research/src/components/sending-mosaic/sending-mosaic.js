@@ -71,7 +71,7 @@ class SendingMosaic extends React.Component {
     onSendMosaic = () => {
         // Defining a transaction
         // replace with recipient address
-        const nodeUrl = 'http://api-01.us-west-1.symboldev.network:3000';
+        const nodeUrl = 'http://api-01.eu-central-1.symboldev.network:3000';
         const recipientAddress = SymbolSDK.Address.createFromRawAddress(this.state.recipientAddress);
         // replace with network type
         const networkType = SymbolSDK.NetworkType.TEST_NET;
